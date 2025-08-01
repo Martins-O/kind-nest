@@ -10,10 +10,10 @@ async function main() {
   console.log("Deploying contracts with account:", deployer.address);
   
   // Check balance
-  const balance = await deployer.getBalance();
-  console.log("Account balance:", hre.ethers.utils.formatEther(balance), "ETH");
+  const balance = await deployer.provider.getBalance(deployer.address);
+  console.log("Account balance:", hre.ethers.formatEther(balance), "ETH");
   
-  if (balance.eq(0)) {
+  if (balance === 0n) {
     console.log("⚠️  Warning: Account balance is 0. Make sure to fund your account with ETH from the Morph faucet:");
     console.log("🚰 Faucet: https://bridge-holesky.morphl2.io/faucet");
   }
@@ -22,13 +22,19 @@ async function main() {
   console.log("\n📄 Deploying ExpenseFactory...");
   const ExpenseFactory = await hre.ethers.getContractFactory("ExpenseFactory");
   const expenseFactory = await ExpenseFactory.deploy();
-  await expenseFactory.deployed();
   
-  console.log("✅ ExpenseFactory deployed to:", expenseFactory.address);
+  // Wait for deployment to complete
+  await expenseFactory.waitForDeployment();
+  const expenseFactoryAddress = await expenseFactory.getAddress();
+  
+  console.log("✅ ExpenseFactory deployed to:", expenseFactoryAddress);
   
   // Wait for a few block confirmations
   console.log("⏳ Waiting for block confirmations...");
-  await expenseFactory.deployTransaction.wait(3);
+  const deploymentTx = expenseFactory.deploymentTransaction();
+  if (deploymentTx) {
+    await deploymentTx.wait(3);
+  }
   
   // Create deployment info
   const deploymentInfo = {
@@ -36,15 +42,15 @@ async function main() {
     chainId: hre.network.config.chainId || "unknown",
     contracts: {
       ExpenseFactory: {
-        address: expenseFactory.address,
-        txHash: expenseFactory.deployTransaction.hash,
-        blockNumber: expenseFactory.deployTransaction.blockNumber,
+        address: expenseFactoryAddress,
+        txHash: deploymentTx ? deploymentTx.hash : "unknown",
+        blockNumber: deploymentTx ? deploymentTx.blockNumber : "unknown",
       }
     },
     deployer: deployer.address,
     deployedAt: new Date().toISOString(),
     gasUsed: {
-      ExpenseFactory: (await expenseFactory.deployTransaction.wait()).gasUsed.toString()
+      ExpenseFactory: deploymentTx ? (await deploymentTx.wait()).gasUsed.toString() : "unknown"
     }
   };
 
@@ -60,7 +66,7 @@ async function main() {
   console.log("\n📋 Deployment Summary:");
   console.log("Network:", hre.network.name);
   console.log("Chain ID:", hre.network.config.chainId || "unknown");
-  console.log("ExpenseFactory:", expenseFactory.address);
+  console.log("ExpenseFactory:", expenseFactoryAddress);
   console.log("Gas used:", deploymentInfo.gasUsed.ExpenseFactory);
   console.log("Deployment info saved to:", deploymentFile);
   
@@ -73,9 +79,8 @@ async function main() {
   const contractsFile = path.join(frontendDir, 'contracts.ts');
   const contractsContent = `// Auto-generated contract addresses
 // Generated on: ${new Date().toISOString()}
-
 export const CONTRACTS = {
-  EXPENSE_FACTORY: '${expenseFactory.address}' as const,
+  EXPENSE_FACTORY: '${expenseFactoryAddress}' as const,
 } as const;
 
 export const NETWORK_INFO = {
@@ -106,7 +111,7 @@ export const NETWORK_INFO = {
   
   if (hre.network.name === "morphHolesky") {
     console.log("\n🔍 Verify on Morph Explorer:");
-    console.log(`https://explorer-holesky.morphl2.io/address/${expenseFactory.address}`);
+    console.log(`https://explorer-holesky.morphl2.io/address/${expenseFactoryAddress}`);
   }
 }
 
