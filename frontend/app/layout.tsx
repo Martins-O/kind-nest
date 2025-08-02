@@ -5,6 +5,14 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'SplitWise 3.0 - Smart Contract Expense Splitting',
   description: 'Automatically split expenses with your friends using smart contracts on Morph L2',
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
+    ],
+    apple: { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+  },
 };
 
 export default function RootLayout({
@@ -14,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <Providers>
           {children}
         </Providers>

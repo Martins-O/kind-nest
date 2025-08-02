@@ -101,9 +101,24 @@ export default function Home() {
             <span className="text-2xl font-bold text-white">SplitWise 3.0</span>
           </div>
           <div className="hidden md:flex items-center space-x-6 text-white/80">
-            <span className="hover:text-white cursor-pointer transition-colors">Features</span>
-            <span className="hover:text-white cursor-pointer transition-colors">How it Works</span>
-            <span className="hover:text-white cursor-pointer transition-colors">About</span>
+            <button 
+              onClick={() => router.push('/features')}
+              className="hover:text-white cursor-pointer transition-colors"
+            >
+              Features
+            </button>
+            <button 
+              onClick={() => router.push('/how-it-works')}
+              className="hover:text-white cursor-pointer transition-colors"
+            >
+              How it Works
+            </button>
+            <button 
+              onClick={() => router.push('/about')}
+              className="hover:text-white cursor-pointer transition-colors"
+            >
+              About
+            </button>
           </div>
         </nav>
 
@@ -132,7 +147,10 @@ export default function Home() {
                 <ConnectButton />
               </div>
             </div>
-            <button className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group">
+            <button 
+              onClick={() => router.push('/how-it-works')}
+              className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group"
+            >
               <span>See how it works</span>
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
