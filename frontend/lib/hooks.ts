@@ -17,7 +17,7 @@ export function useCreateGroup() {
       abi: EXPENSE_FACTORY_ABI,
       functionName: 'createGroup',
       args: [name, creatorNickname],
-    });
+    } as any);
   };
 
   return {
@@ -33,31 +33,45 @@ export function useUserGroups(userAddress?: string) {
   return useReadContract({
     address: CONTRACTS.EXPENSE_FACTORY,
     abi: EXPENSE_FACTORY_ABI,
-    functionName: 'getUserGroupsWithInfo',
-    args: userAddress ? [userAddress] : undefined,
+    functionName: 'getUserGroups',
+    args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!userAddress,
     },
   });
 }
 
-// Group Treasury hooks
-export function useGroupExpenses(groupAddress?: string) {
+export function useGroupInfo(groupAddress?: string) {
   return useReadContract({
-    address: groupAddress as `0x${string}`,
-    abi: GROUP_TREASURY_ABI,
-    functionName: 'getExpenses',
+    address: CONTRACTS.EXPENSE_FACTORY,
+    abi: EXPENSE_FACTORY_ABI,
+    functionName: 'getGroupInfo',
+    args: groupAddress ? [groupAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!groupAddress,
     },
   });
 }
 
-export function useGroupMembers(groupAddress?: string) {
+// Group Treasury hooks
+export function useGroupExpenses(groupAddress?: string, offset = 0, limit = 10) {
   return useReadContract({
     address: groupAddress as `0x${string}`,
     abi: GROUP_TREASURY_ABI,
-    functionName: 'getMembers',
+    functionName: 'getExpensesPaginated',
+    args: [BigInt(offset), BigInt(limit)],
+    query: {
+      enabled: !!groupAddress,
+    },
+  });
+}
+
+export function useGroupMembers(groupAddress?: string, offset = 0, limit = 20) {
+  return useReadContract({
+    address: groupAddress as `0x${string}`,
+    abi: GROUP_TREASURY_ABI,
+    functionName: 'getMembersPaginated',
+    args: [BigInt(offset), BigInt(limit)],
     query: {
       enabled: !!groupAddress,
     },
@@ -80,7 +94,7 @@ export function useMemberInfo(groupAddress?: string, memberAddress?: string) {
     address: groupAddress as `0x${string}`,
     abi: GROUP_TREASURY_ABI,
     functionName: 'getMemberInfo',
-    args: memberAddress ? [memberAddress] : undefined,
+    args: memberAddress ? [memberAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!(groupAddress && memberAddress),
     },
@@ -92,7 +106,7 @@ export function useMemberBalance(groupAddress?: string, memberAddress?: string) 
     address: groupAddress as `0x${string}`,
     abi: GROUP_TREASURY_ABI,
     functionName: 'getBalance',
-    args: memberAddress ? [memberAddress] : undefined,
+    args: memberAddress ? [memberAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!(groupAddress && memberAddress),
     },
@@ -104,10 +118,18 @@ export function useDebtTo(groupAddress?: string, creditorAddress?: string) {
     address: groupAddress as `0x${string}`,
     abi: GROUP_TREASURY_ABI,
     functionName: 'getDebtTo',
-    args: creditorAddress ? [creditorAddress] : undefined,
+    args: creditorAddress ? [creditorAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!(groupAddress && creditorAddress),
     },
+  });
+}
+
+export function useCreationFee() {
+  return useReadContract({
+    address: CONTRACTS.EXPENSE_FACTORY,
+    abi: EXPENSE_FACTORY_ABI,
+    functionName: 'creationFee',
   });
 }
 
@@ -123,8 +145,8 @@ export function useAddMember(groupAddress: string) {
       address: groupAddress as `0x${string}`,
       abi: GROUP_TREASURY_ABI,
       functionName: 'addMember',
-      args: [memberAddress, nickname],
-    });
+      args: [memberAddress as `0x${string}`, nickname],
+    } as any);
   };
 
   return {
@@ -142,13 +164,13 @@ export function useAddExpense(groupAddress: string) {
     hash,
   });
 
-  const addExpense = (description: string, amount: bigint, participants: string[]) => {
+  const addExpense = (description: string, amount: bigint, participants: string[], receiptHash: string = '0x0000000000000000000000000000000000000000000000000000000000000000') => {
     writeContract({
       address: groupAddress as `0x${string}`,
       abi: GROUP_TREASURY_ABI,
       functionName: 'addExpense',
-      args: [description, amount, participants],
-    });
+      args: [description, amount, participants.map(p => p as `0x${string}`), receiptHash as `0x${string}`],
+    } as any);
   };
 
   return {
@@ -171,9 +193,9 @@ export function useSettleDebt(groupAddress: string) {
       address: groupAddress as `0x${string}`,
       abi: GROUP_TREASURY_ABI,
       functionName: 'settleDebt',
-      args: [creditorAddress],
+      args: [creditorAddress as `0x${string}`],
       value: amount,
-    });
+    } as any);
   };
 
   return {

@@ -35,10 +35,14 @@ function GroupDetailClient({ groupAddress }: { groupAddress: string }) {
 
   // Data hooks
   const { data: groupName } = useGroupName(groupAddress);
-  const { data: expenses, refetch: refetchExpenses } = useGroupExpenses(groupAddress);
-  const { data: members, refetch: refetchMembers } = useGroupMembers(groupAddress);
+  const { data: expensesData, refetch: refetchExpenses } = useGroupExpenses(groupAddress);
+  const { data: membersData, refetch: refetchMembers } = useGroupMembers(groupAddress);
   const { data: memberInfo } = useMemberInfo(groupAddress, address);
   const { data: balance } = useMemberBalance(groupAddress, address);
+
+  // Extract data from paginated responses
+  const expenses = expensesData ? expensesData[0] : [];
+  const members = membersData ? membersData[0] : [];
 
   // Write hooks
   const { addMember, isPending: addingMember, isSuccess: memberAdded } = useAddMember(groupAddress);
@@ -462,7 +466,7 @@ function GroupDetailClient({ groupAddress }: { groupAddress: string }) {
               </div>
               <h3 className="text-3xl font-bold text-white mb-4">Not a Member Yet</h3>
               <p className="text-white/70 text-lg mb-8 max-w-md mx-auto">
-                You're not a member of this group. Ask the group admin to add you as a member to participate in expense splitting.
+                You&apos;re not a member of this group. Ask the group admin to add you as a member to participate in expense splitting.
               </p>
               <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
                 <p className="text-white/60 text-sm">

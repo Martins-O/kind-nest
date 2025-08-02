@@ -7,6 +7,7 @@ export interface Expense {
   shares: bigint[];
   settled: boolean;
   timestamp: bigint;
+  receiptHash: string;
 }
 
 export interface Member {
