@@ -3,7 +3,7 @@ import { Providers } from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'SplitWise 3.0 - Smart Contract Expense Splitting',
+  title: 'KindNest',
   description: 'Automatically split expenses with your friends using smart contracts on Morph L2',
   icons: {
     icon: [
