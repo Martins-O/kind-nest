@@ -2,6 +2,7 @@
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { CONTRACTS, EXPENSE_FACTORY_ABI, GROUP_TREASURY_ABI } from './contracts';
+import { shortenAddress } from './utils';
 import type { GroupInfo, Expense, Member } from '@/types';
 
 // Factory hooks
@@ -37,6 +38,8 @@ export function useUserGroups(userAddress?: string) {
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!userAddress,
+      refetchInterval: 10000, // Refetch every 10 seconds
+      staleTime: 5000, // Consider data stale after 5 seconds
     },
   });
 }
@@ -97,6 +100,7 @@ export function useMemberInfo(groupAddress?: string, memberAddress?: string) {
     args: memberAddress ? [memberAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!(groupAddress && memberAddress),
+      retry: false, // Don't retry on revert
     },
   });
 }
@@ -109,6 +113,7 @@ export function useMemberBalance(groupAddress?: string, memberAddress?: string) 
     args: memberAddress ? [memberAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!(groupAddress && memberAddress),
+      retry: false, // Don't retry on revert
     },
   });
 }
@@ -125,12 +130,52 @@ export function useDebtTo(groupAddress?: string, creditorAddress?: string) {
   });
 }
 
+// Helper hook to check if user is a member by checking the members list
+export function useIsMember(groupAddress?: string, userAddress?: string) {
+  const { data: membersData } = useGroupMembers(groupAddress);
+  const members = membersData ? membersData[0] : [];
+  
+  if (!userAddress || !members) return false;
+  
+  return members.some(member => member.toLowerCase() === userAddress.toLowerCase());
+}
+
+// Helper hook to get member nickname
+export function useMemberNickname(groupAddress?: string, memberAddress?: string) {
+  const { data: memberInfo } = useMemberInfo(groupAddress, memberAddress);
+  return memberInfo?.nickname || shortenAddress(memberAddress || '');
+}
+
 export function useCreationFee() {
   return useReadContract({
     address: CONTRACTS.EXPENSE_FACTORY,
     abi: EXPENSE_FACTORY_ABI,
     functionName: 'creationFee',
   });
+}
+
+export function useDeactivateGroup() {
+  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const deactivateGroup = (groupAddress: string) => {
+    writeContract({
+      address: CONTRACTS.EXPENSE_FACTORY,
+      abi: EXPENSE_FACTORY_ABI,
+      functionName: 'deactivateGroup',
+      args: [groupAddress as `0x${string}`],
+    } as any);
+  };
+
+  return {
+    deactivateGroup,
+    hash,
+    isPending,
+    isConfirming,
+    isSuccess,
+  };
 }
 
 // Write functions

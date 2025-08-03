@@ -3,9 +3,9 @@
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Plus, Users, Receipt, Wallet } from 'lucide-react';
+import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf } from 'lucide-react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useUserGroups, useCreateGroup, useGroupInfo, useCreationFee } from '@/lib/hooks';
+import { useUserGroups, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [groupName, setGroupName] = useState('');
   const [nickname, setNickname] = useState('');
 
-  const { data: userGroupAddresses, isLoading: groupsLoading, refetch } = useUserGroups(address);
+  const { data: userGroupAddresses, isLoading: groupsLoading, refetch: refetchGroups } = useUserGroups(address);
   const { createGroup, isPending, isConfirming, isSuccess } = useCreateGroup();
   const { data: creationFee } = useCreationFee();
 
@@ -33,9 +33,9 @@ export default function Dashboard() {
       setShowCreateGroup(false);
       setGroupName('');
       setNickname('');
-      refetch();
+      refetchGroups();
     }
-  }, [isSuccess, refetch]);
+  }, [isSuccess, refetchGroups]);
 
   const handleCreateGroup = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ export default function Dashboard() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center">
         <Card className="p-8">
           <CardContent>
             <h2 className="text-2xl font-bold mb-4">Please connect your wallet</h2>
@@ -58,15 +58,24 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">Your Groups</h1>
-            <p className="text-white/80">Manage your expense splitting groups</p>
+            <h1 className="text-4xl font-bold text-white mb-2">Your Nests</h1>
+            <p className="text-white/80">Your circles of care and support</p>
           </div>
           <div className="flex items-center gap-4">
+            <Button
+              onClick={() => refetchGroups()}
+              variant="outline"
+              size="sm"
+              className="bg-kindnest-500/10 text-white border-kindnest-400/30 hover:bg-kindnest-500/20 transition-all duration-200"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh Nests
+            </Button>
             <ConnectButton />
           </div>
         </div>
@@ -75,16 +84,16 @@ export default function Dashboard() {
         {showCreateGroup && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Create New Group</CardTitle>
+              <CardTitle>Create Your Nest</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleCreateGroup} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Group Name</label>
+                  <label className="block text-sm font-medium mb-2">Nest Name</label>
                   <Input
                     value={groupName}
                     onChange={(e) => setGroupName(e.target.value)}
-                    placeholder="e.g., Weekend Trip, Roommates, Office Lunch"
+                    placeholder="e.g., Sarah&apos;s Recovery Fund, Family Support, Community Care"
                     required
                   />
                 </div>
@@ -93,7 +102,7 @@ export default function Dashboard() {
                   <Input
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
-                    placeholder="How should others see you in this group?"
+                    placeholder="How should others see you in this nest?"
                     required
                   />
                 </div>
@@ -108,7 +117,7 @@ export default function Dashboard() {
                     loading={isPending || isConfirming}
                     disabled={!groupName.trim() || !nickname.trim()}
                   >
-                    Create Group
+                    Create Your Nest
                   </Button>
                   <Button 
                     type="button" 
@@ -127,22 +136,28 @@ export default function Dashboard() {
         <div className="grid gap-6">
           {/* Create Group Card */}
           {!showCreateGroup && (
-            <Card className="border-2 border-dashed border-gray-300 hover:border-blue-500 transition-colors cursor-pointer">
+            <Card className="border-2 border-dashed border-kindnest-400/30 hover:border-kindnest-500 bg-white/5 backdrop-blur-lg transition-all duration-300 cursor-pointer hover:scale-105">
               <CardContent 
                 className="flex flex-col items-center justify-center py-12 text-center"
                 onClick={() => setShowCreateGroup(true)}
               >
-                <Plus className="h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">Create New Group</h3>
-                <p className="text-gray-500">Start splitting expenses with friends</p>
+                <div className="w-16 h-16 bg-gradient-to-br from-kindnest-500 to-kindnest-teal-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                  <Heart className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">Create Your Nest</h3>
+                <p className="text-white/70">Start something beautiful together</p>
               </CardContent>
             </Card>
           )}
 
           {/* User Groups */}
           {groupsLoading ? (
-            <div className="text-center py-8">
-              <div className="text-white">Loading your groups...</div>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gradient-to-br from-kindnest-500/20 to-kindnest-teal-500/20 rounded-3xl flex items-center justify-center mx-auto mb-4 float-animation">
+                <Heart className="h-8 w-8 text-kindnest-400 animate-pulse" />
+              </div>
+              <div className="text-white text-lg font-medium mb-2">Finding your nests...</div>
+              <div className="text-white/70">Gathering all the places where care grows</div>
             </div>
           ) : userGroupAddresses && userGroupAddresses.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -158,12 +173,14 @@ export default function Dashboard() {
           ) : (
             <Card>
               <CardContent className="text-center py-12">
-                <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">No groups yet</h3>
-                <p className="text-gray-500 mb-4">Create your first group to start splitting expenses</p>
+                <div className="w-20 h-20 bg-gradient-to-br from-kindnest-500/20 to-kindnest-teal-500/20 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                  <Leaf className="h-10 w-10 text-kindnest-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">No nests yet</h3>
+                <p className="text-white/70 mb-4">Create your first nest to start supporting each other</p>
                 <Button onClick={() => setShowCreateGroup(true)}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Create Group
+                  Create Your Nest
                 </Button>
               </CardContent>
             </Card>
@@ -185,6 +202,9 @@ function GroupCard({
   onGroupClick: (address: string) => void;
 }) {
   const { data: groupInfo } = useGroupInfo(groupAddress);
+  const { data: memberInfo } = useMemberInfo(groupAddress, userAddress);
+  const { data: balance } = useMemberBalance(groupAddress, userAddress);
+  const isMember = useIsMember(groupAddress, userAddress);
 
   if (!groupInfo) {
     return (
@@ -223,9 +243,33 @@ function GroupCard({
             <Receipt className="h-4 w-4" />
             Created {formatDate(groupInfo.createdAt)}
           </div>
-          {groupInfo.creator === userAddress && (
-            <div className="text-blue-600 font-medium">
-              You&apos;re the admin
+          
+          {/* Member Status */}
+          {groupInfo.creator === userAddress ? (
+            <div className="text-emerald-600 font-medium">
+              🌱 You started this nest
+            </div>
+          ) : isMember ? (
+            <div className="text-teal-600 font-medium">
+              🤝 You&apos;re part of this nest
+            </div>
+          ) : (
+            <div className="text-gray-500 font-medium">
+              👀 Not in this nest
+            </div>
+          )}
+          
+          {/* Balance Display */}
+          {isMember && balance !== undefined && (
+            <div className="flex items-center gap-2">
+              <HandHeart className="h-4 w-4" />
+              <span className={`font-medium ${Number(balance) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {Number(balance) >= 0 ? '+' : ''}
+                {formatETH(BigInt(balance.toString()))} ETH
+              </span>
+              <span className="text-xs text-gray-500">
+                {Number(balance) >= 0 ? '(support flowing to you)' : '(you can contribute)'}
+              </span>
             </div>
           )}
         </div>

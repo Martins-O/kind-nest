@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { 
   ArrowLeft, 
-  Coins,
+  Leaf,
   Target,
   Zap,
   Users,
@@ -18,7 +18,9 @@ import {
   Star,
   Github,
   ExternalLink,
-  Award
+  Award,
+  Sprout,
+  HandHeart
 } from 'lucide-react';
 
 export default function About() {
@@ -30,10 +32,10 @@ export default function About() {
   }, []);
 
   const stats = [
-    { label: "Smart Contracts", value: "2", icon: Code },
-    { label: "Lines of Code", value: "5000+", icon: Github },
-    { label: "Features", value: "15+", icon: Star },
-    { label: "Test Coverage", value: "95%", icon: Shield }
+    { label: "Care Contracts", value: "2", icon: Code },
+    { label: "Lines of Love", value: "5000+", icon: Github },
+    { label: "Ways to Help", value: "15+", icon: Star },
+    { label: "Trust Coverage", value: "95%", icon: Shield }
   ];
 
   const techStack = [
@@ -73,23 +75,23 @@ export default function About() {
   const teamValues = [
     {
       icon: Target,
-      title: "Mission-Driven",
-      description: "Making financial coordination seamless and transparent for everyone"
+      title: "Heart-Centered",
+      description: "Making support seamless and transparent. Every interaction designed with empathy."
     },
     {
       icon: Shield,
-      title: "Security First", 
-      description: "Your funds and data are protected by battle-tested smart contracts"
+      title: "Safe & Trustworthy", 
+      description: "Your contributions are protected by smart contracts, your heart by our community."
     },
     {
       icon: Globe,
-      title: "Global Impact",
-      description: "Building tools that work for people everywhere, regardless of location"
+      title: "Connected Globally",
+      description: "Distance doesn't matter when hearts connect. Support flows everywhere."
     },
     {
       icon: Heart,
-      title: "Community Focused",
-      description: "Created by developers, for developers and users who value transparency"
+      title: "Human First",
+      description: "Every interaction designed with empathy. Technology that serves humanity."
     }
   ];
 
@@ -116,10 +118,10 @@ export default function About() {
               <span>Back to Home</span>
             </button>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Coins className="h-5 w-5 text-white" />
+              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                <Leaf className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">SplitWise 3.0</span>
+              <span className="text-xl font-bold text-white">KindNest</span>
             </div>
           </div>
           <ConnectButton />
@@ -132,33 +134,32 @@ export default function About() {
             <span className="text-white/90 text-sm font-medium">Morph Consumer Buildathon 2025</span>
           </div>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-6">
-            About SplitWise 3.0
+            About KindNest
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
-            The future of expense splitting built on blockchain technology. Transparent, secure, and globally accessible.
+            Where support feels human. Built with blockchain transparency and wrapped in empathy.
           </p>
         </div>
 
         {/* Project Story */}
         <div className="py-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-white text-center mb-12">Our Story</h2>
+            <h2 className="text-4xl font-bold text-white text-center mb-12">Our Heart</h2>
             <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10">
               <div className="prose prose-lg prose-invert max-w-none">
                 <p className="text-white/80 text-lg leading-relaxed mb-6">
-                  SplitWise 3.0 was born from a simple frustration: traditional expense splitting apps are centralized, 
-                  charge high fees, and don&apos;t work seamlessly across borders. We envisioned a world where friends could 
-                  split expenses instantly, securely, and transparently using blockchain technology.
+                  KindNest grew from a simple realization: supporting each other shouldn&apos;t feel cold or complicated. 
+                  We saw people struggling with awkward money conversations, forgotten contributions, and the distance 
+                  that financial stress creates between loved ones.
                 </p>
                 <p className="text-white/80 text-lg leading-relaxed mb-6">
-                  Built specifically for the Morph Consumer Buildathon 2025, SplitWise 3.0 leverages the power of 
-                  Layer 2 scaling to provide ultra-low fees while maintaining the security and decentralization of 
-                  Ethereum. Every expense, every payment, every settlement is recorded immutably on the blockchain.
+                  Built for the Morph Consumer Buildathon 2025, KindNest wraps blockchain transparency in human warmth. 
+                  Every contribution, every act of support, every moment of care is recorded with the security of 
+                  smart contracts and the gentleness of community.
                 </p>
                 <p className="text-white/80 text-lg leading-relaxed">
-                  Our mission is simple: make expense splitting as easy as sending a text message, but with the 
-                  transparency and security that only blockchain technology can provide. No more forgotten IOUs, 
-                  no more trust issues, no more geographical barriers.
+                  Our mission is beautifully simple: make supporting each other feel as natural as a warm hug. 
+                  You&apos;re not alone in this. Together is easier, and every little helps.
                 </p>
               </div>
             </div>
@@ -167,7 +168,7 @@ export default function About() {
 
         {/* Stats */}
         <div className="py-16">
-          <h2 className="text-4xl font-bold text-white text-center mb-12">By The Numbers</h2>
+          <h2 className="text-4xl font-bold text-white text-center mb-12">Growing Together</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, index) => {
               const Icon = stat.icon;
@@ -212,7 +213,7 @@ export default function About() {
 
         {/* Values */}
         <div className="py-16">
-          <h2 className="text-4xl font-bold text-white text-center mb-12">Our Values</h2>
+          <h2 className="text-4xl font-bold text-white text-center mb-12">What We Believe</h2>
           <div className="grid sm:grid-cols-2 gap-8">
             {teamValues.map((value, index) => {
               const Icon = value.icon;
@@ -238,8 +239,8 @@ export default function About() {
             <Award className="h-20 w-20 text-yellow-400 mx-auto mb-6" />
             <h2 className="text-4xl font-bold text-white mb-6">Morph Consumer Buildathon 2025</h2>
             <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
-              SplitWise 3.0 was built as part of the Morph Consumer Buildathon 2025, competing for a share of the 
-              $15,000 prize pool. This project showcases the potential of Layer 2 scaling for real-world consumer applications.
+              KindNest was lovingly built for the Morph Consumer Buildathon 2025. More than competing for prizes, 
+              we&apos;re showcasing how blockchain technology can make human connection warmer, not colder.
             </p>
             <div className="grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
               <div className="bg-white/10 rounded-2xl p-4">
@@ -265,8 +266,8 @@ export default function About() {
             <h2 className="text-4xl font-bold text-white mb-8">The Future of Finance</h2>
             <p className="text-xl text-white/80 leading-relaxed mb-8">
               We believe the future of finance is decentralized, transparent, and accessible to everyone. 
-              SplitWise 3.0 is just the beginning. We&apos;re building towards a world where money moves as easily 
-              as information, where trust is built into the system, and where financial barriers disappear.
+              KindNest is just the beginning. We&apos;re building towards a world where support flows as easily 
+              as love, where trust is built into every interaction, and where caring knows no boundaries.
             </p>
             <div className="grid sm:grid-cols-3 gap-6 text-center">
               <div>

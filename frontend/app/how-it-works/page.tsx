@@ -8,8 +8,8 @@ import {
   ArrowRight,
   Wallet,
   Users,
-  DollarSign,
-  Coins,
+  HandHeart,
+  Leaf,
   CheckCircle,
   Plus,
   UserPlus,
@@ -19,7 +19,9 @@ import {
   Shield,
   Zap,
   Globe,
-  Smartphone
+  Smartphone,
+  Heart,
+  Sprout
 } from 'lucide-react';
 
 export default function HowItWorks() {
@@ -33,13 +35,13 @@ export default function HowItWorks() {
   const steps = [
     {
       step: "01",
-      title: "Connect Your Wallet",
-      description: "Connect your Web3 wallet and switch to Morph L2 network to get started",
+      title: "How To Connect Your Wallet",
+      description: "Connect your Web3 wallet to begin your journey of care and community support",
       icon: Wallet,
       color: "from-blue-500 to-indigo-500",
       details: [
         "Install MetaMask or any Web3 wallet",
-        "Connect to the SplitWise app",
+        "Connect to the KindNest app",
         "Switch to Morph Holesky testnet",
         "Your wallet is now ready!"
       ],
@@ -47,8 +49,8 @@ export default function HowItWorks() {
     },
     {
       step: "02", 
-      title: "Create Your Group",
-      description: "Set up an expense group with a custom name and start inviting friends",
+      title: "Create Your Nest",
+      description: "Start a support circle with a meaningful name and begin inviting those who matter",
       icon: Users,
       color: "from-purple-500 to-pink-500",
       details: [
@@ -103,17 +105,17 @@ export default function HowItWorks() {
     },
     {
       step: "06",
-      title: "Settle Debts",
-      description: "Pay what you owe with one click directly through the blockchain",
-      icon: DollarSign,
+      title: "Contribute with Love",
+      description: "Give what you can with one click directly through the blockchain",
+      icon: HandHeart,
       color: "from-violet-500 to-purple-500",
       details: [
-        "Click 'Settle Debt' if you owe money",
-        "Confirm transaction in your wallet",
-        "Payment is sent instantly",
-        "Balance updates automatically"
+        "Click 'Contribute Kindly' when you can help",
+        "Confirm your contribution in wallet",
+        "Your kindness is sent instantly",
+        "Support flows update automatically"
       ],
-      tips: "Settlement is instant and recorded permanently on blockchain"
+      tips: "All acts of kindness are recorded permanently with love"
     }
   ];
 
@@ -134,7 +136,7 @@ export default function HowItWorks() {
       description: "Works anywhere in the world, 24/7, with any Web3 wallet"
     },
     {
-      icon: DollarSign,
+      icon: HandHeart,
       title: "Ultra-Low Fees",
       description: "Layer 2 technology means extremely low transaction costs"
     }
@@ -182,10 +184,10 @@ export default function HowItWorks() {
               <span>Back to Home</span>
             </button>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Coins className="h-5 w-5 text-white" />
+              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                <Leaf className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">SplitWise 3.0</span>
+              <span className="text-xl font-bold text-white">KindNest</span>
             </div>
           </div>
           <ConnectButton />
@@ -194,10 +196,10 @@ export default function HowItWorks() {
         {/* Header */}
         <div className={`text-center py-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-6">
-            How It Works
+            How We Care
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
-            Get started with SplitWise 3.0 in just 6 simple steps. Split expenses like a pro in minutes!
+            Creating your nest of support is beautifully simple. Six gentle steps to start sharing care.
           </p>
         </div>
 
@@ -252,7 +254,7 @@ export default function HowItWorks() {
 
         {/* Benefits */}
         <div className="py-16">
-          <h2 className="text-4xl font-bold text-white text-center mb-16">Why This Approach Works</h2>
+          <h2 className="text-4xl font-bold text-white text-center mb-16">Why Care Works Better</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon;
@@ -290,12 +292,12 @@ export default function HowItWorks() {
 
         {/* CTA */}
         <div className="py-16 text-center">
-          <div className="bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-indigo-500/20 backdrop-blur-lg rounded-3xl p-12 border border-white/10 max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
+          <div className="bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-blue-500/20 backdrop-blur-lg rounded-3xl p-12 border border-white/10 max-w-4xl mx-auto">
+            <h2 className="text-4xl font-bold text-white mb-6">Begin with Kindness</h2>
             <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-              Connect your wallet now and create your first expense group in under 2 minutes
+              You&apos;re not alone in this. Connect your wallet and create your first nest of support in under 2 minutes.
             </p>
-            <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-1 rounded-2xl inline-block">
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl inline-block">
               <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
                 <ConnectButton />
               </div>

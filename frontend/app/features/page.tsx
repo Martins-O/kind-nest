@@ -11,15 +11,17 @@ import {
   TrendingUp, 
   Globe, 
   Timer,
-  Coins,
+  Leaf,
   CheckCircle,
   Wallet,
-  DollarSign,
+  HandHeart,
   Receipt,
   BarChart,
   Lock,
   Smartphone,
-  Cloud
+  Cloud,
+  Heart,
+  Sprout
 } from 'lucide-react';
 
 export default function Features() {
@@ -33,15 +35,15 @@ export default function Features() {
   const mainFeatures = [
     {
       icon: Users,
-      title: "Smart Group Management",
-      description: "Create unlimited expense groups with custom names and invite friends using their wallet addresses",
+      title: "Create Your Nest",
+      description: "Start support circles with unlimited members. Every nest is a place where care grows naturally.",
       details: [
-        "Unlimited group members",
-        "Custom group names and descriptions",
-        "Easy member invitation system",
-        "Real-time member status tracking"
+        "Unlimited nest members",
+        "Personal nest names and purpose",
+        "Gentle invitation system",
+        "Real-time support tracking"
       ],
-      color: "from-pink-500 to-rose-500"
+      color: "from-emerald-500 to-teal-500"
     },
     {
       icon: Shield,
@@ -112,7 +114,7 @@ export default function Features() {
       description: "Connect with MetaMask, WalletConnect, and other popular Web3 wallets"
     },
     {
-      icon: DollarSign,
+      icon: HandHeart,
       title: "Smart Splitting",
       description: "Automatic calculation of exact amounts owed by each group member"
     },
@@ -161,10 +163,10 @@ export default function Features() {
               <span>Back to Home</span>
             </button>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Coins className="h-5 w-5 text-white" />
+              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                <Leaf className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">SplitWise 3.0</span>
+              <span className="text-xl font-bold text-white">KindNest</span>
             </div>
           </div>
           <ConnectButton />
@@ -173,10 +175,10 @@ export default function Features() {
         {/* Header */}
         <div className={`text-center py-16 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-6">
-            Powerful Features
+            Small Acts, Shared Purpose
           </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
-            Discover what makes SplitWise 3.0 the most advanced expense splitting platform on the blockchain
+            Discover what makes KindNest the warmest way to support each other. Every feature designed with empathy and care.
           </p>
         </div>
 
