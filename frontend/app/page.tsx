@@ -139,7 +139,7 @@ export default function Home() {
           
           <p className="text-lg sm:text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed">
             Share costs, share care. 
-            Every little helps — and adds up to something beautiful.
+            Every little helps, adding up to something beautiful.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
