@@ -1,31 +1,63 @@
-# SplitWise 3.0 - Smart Contract Expense Splitting
+# 🌱 KindNest - Support that feels human
 
-A modern expense splitting application built on Morph L2 blockchain that automatically splits bills between friends using smart contracts.
+*Softly structured. Human, hopeful, and clear. KindNest speaks like a kind, grounded friend who gets things done.*
+
+A warm, community-focused platform where support flows as naturally as love. Built on Morph L2 blockchain with transparency, trust, and human connection at its heart.
+
+**Together is easier.** ✨
 
 Built for the **Morph Consumer Buildathon 2025** 🏆
 
 ## 🌟 Features
 
-- **Smart Contract Powered**: Transparent, automated expense splitting with blockchain security
-- **Group Management**: Create and manage expense groups with friends
-- **Automatic Splitting**: Fair division of expenses among participants
-- **Instant Settlement**: Pay debts directly through smart contracts
-- **Low Fees**: Built on Morph L2 for affordable transactions
-- **Modern UI**: Clean, responsive interface built with Next.js and Tailwind CSS
+### 💚 **Human-Centered Support**
+- **Create Your Nest**: Start intimate circles of care with the people who matter
+- **Share Costs, Share Care**: Transparent contribution tracking where every gesture counts
+- **Contribute Kindly**: Support flows naturally when it's needed most—no pressure, just care
+- **Together is Easier**: Fair sharing that feels fair, looks fair, and *is* fair
+- **Support Anywhere**: Distance doesn't matter when hearts connect across the blockchain
+- **Warm & Reassuring**: Every interaction designed with empathy, clarity, and genuine care
+
+### 🎨 **Beautiful, Thoughtful Design**
+- **Emerald & Teal Gradients**: Colors that evoke growth, healing, and community
+- **Gentle Animations**: Floating effects, warm glows, and interactions that feel alive
+- **Human-Centered Loading**: "Finding your nests..." instead of cold progress bars  
+- **Glass-Effect UI**: Backdrop blur and soft transparency for a modern, welcoming feel
+- **Heart-Based Feedback**: Pulsing hearts replace generic spinners throughout the app
+
+## 💝 **KindNest Brand Philosophy**
+
+KindNest embodies four core personality pillars that guide every design decision:
+
+### 🌿 **Warm & Reassuring**
+*"You're not alone in this."* Every interaction feels like a gentle hand on your shoulder, offering comfort and understanding when money matters feel overwhelming.
+
+### 🌟 **Clear & Honest** 
+*"Here's exactly what's happening."* We believe transparency builds trust. No hidden fees, no confusing jargon—just clear, honest information presented with care.
+
+### 💪 **Empowering & Inclusive**
+*"You've got this, and we've got you."* KindNest gives you the tools and confidence to manage shared expenses while ensuring everyone feels valued and included.
+
+### 🎯 **Humble but Purposeful**
+*"Quietly getting things done."* We solve real problems without fanfare, focusing on what matters: making support feel natural and stress-free.
+
+**Design Language**: Soft emerald and teal gradients evoke growth and healing. Gentle animations make interactions feel alive and responsive. Every loading state, button hover, and transition is crafted to feel distinctly human.
 
 ## 🏗️ Architecture
 
 ### Smart Contracts
-- **ExpenseFactory.sol**: Creates and manages expense groups
-- **GroupTreasury.sol**: Handles expense tracking, splitting, and settlements
-- Built with Solidity ^0.8.20 and OpenZeppelin contracts
+- **ExpenseFactory.sol**: Creates and manages support nests
+- **GroupTreasury.sol**: Handles contribution tracking, sharing, and settlements
+- Built with Solidity ^0.8.20 and OpenZeppelin contracts for maximum security
 
 ### Frontend
-- **Next.js 15** with React 19
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **wagmi v2** and **RainbowKit** for Web3 integration
-- **Viem** for Ethereum interactions
+- **Next.js 15** with React 19 for modern, fast interactions
+- **TypeScript** for type safety and developer confidence  
+- **Tailwind CSS** with custom KindNest design system
+- **Custom RainbowKit Theme** seamlessly integrated with emerald/teal branding
+- **wagmi v2** and **RainbowKit** for smooth Web3 experiences
+- **Viem** for reliable Ethereum interactions
+- **Human-Centered Animations** with CSS transforms and keyframes
 
 ## 🚀 Quick Start
 
@@ -93,37 +125,42 @@ Built for the **Morph Consumer Buildathon 2025** 🏆
 4. **Open browser**
    Navigate to `http://localhost:3000`
 
-## 📱 Usage Guide
+## 🌱 How to Use KindNest
 
-### 1. Connect Wallet
-- Open the application
-- Click "Connect Wallet"
+### 1. **Connect Your Heart** 💝
+- Open KindNest in your browser
+- Click the beautiful emerald "Connect Wallet" button
 - Ensure you're on Morph Holesky Testnet (Chain ID: 2810)
+- *Your digital wallet is now ready to spread kindness*
 
-### 2. Create a Group
-- Click "Create New Group"
-- Enter group name and your nickname
-- Confirm transaction
+### 2. **Create Your Nest** 🏡
+- Click "Create Your Nest" to start something beautiful
+- Give your nest a warm name like "Family Support Circle" or "Friend's Care Fund"
+- Choose how others will see you (your caring nickname)
+- Confirm with love ✨
 
-### 3. Add Members
-- Open your group
-- Click "Add Member"
-- Enter member's wallet address and nickname
-- Confirm transaction (only group creator can add members)
+### 3. **Invite Someone** 🤗
+- Open your cozy nest
+- Click "Invite Someone" to grow your circle of care  
+- Enter their wallet address and a loving nickname
+- *Only nest creators can invite new members - keeping things safe and intimate*
 
-### 4. Add Expenses
-- Click "Add Expense"
-- Enter description and amount in ETH
-- Select participants
-- Confirm transaction
+### 4. **Share a Cost** 💚
+- Click "Share a Cost" when support is needed
+- Describe what you're sharing (like "Sarah's recovery fund" or "Dinner for the group")
+- Enter the amount with care and select who should contribute
+- Watch as transparency meets compassion
 
-### 5. View Balances
-- See your balance (positive = owed money, negative = you owe)
-- View all group expenses and members
+### 5. **See How Care Flows** 📊
+- View your nest's caring balance (who's contributed, who needs support)
+- Positive balance = others have supported you 💚
+- Negative balance = time to show some love back 🌟
+- *Every number tells a story of human connection*
 
-### 6. Settle Debts
-- Click on debt amount to pay
-- Confirm transaction with exact debt amount
+### 6. **Contribute Kindly** ✨
+- When it's time to support someone, click on the amount with a heart
+- Send exactly what's needed - no more, no less
+- *Support flows naturally when it feels right*
 
 ## 🔧 Configuration
 
@@ -170,21 +207,28 @@ npm run lint # ESLint
 ## 📂 Project Structure
 
 ```
-splitwise3-mvp/
-├── contracts/                 # Smart contracts
+kindnest-mvp/
+├── contracts/                 # Smart contracts for trust & transparency
 │   ├── contracts/
-│   │   ├── GroupTreasury.sol  # Main expense logic
-│   │   └── ExpenseFactory.sol # Group creation
+│   │   ├── GroupTreasury.sol  # Core support & contribution logic
+│   │   └── ExpenseFactory.sol # Nest creation & management
 │   ├── scripts/
-│   │   └── deploy.js          # Deployment script
-│   ├── test/                  # Contract tests
-│   └── hardhat.config.js      # Hardhat config
-├── frontend/                  # Next.js application
-│   ├── app/                   # App router pages
-│   ├── components/            # React components
-│   ├── lib/                   # Utilities and hooks
-│   └── types/                 # TypeScript types
-└── README.md
+│   │   └── deploy.js          # Blockchain deployment magic
+│   ├── test/                  # Comprehensive security tests
+│   └── hardhat.config.js      # Morph L2 configuration
+├── frontend/                  # KindNest web application
+│   ├── app/                   # Next.js app router (pages & layouts)
+│   │   ├── page.tsx           # Landing page with hero section
+│   │   ├── dashboard/         # Your nests overview
+│   │   ├── groups/[id]/       # Individual nest management
+│   │   ├── about/             # KindNest story & values
+│   │   ├── how-it-works/      # Step-by-step caring guide
+│   │   └── globals.css        # KindNest design system & animations
+│   ├── components/            # Reusable UI components
+│   │   └── ui/                # Button, Input, Card with KindNest styling
+│   ├── lib/                   # Web3 hooks, utils, & contract interactions
+│   └── types/                 # TypeScript definitions
+└── README.md                  # You are here! 🌱
 ```
 
 ## 🔐 Security Considerations
@@ -198,7 +242,6 @@ splitwise3-mvp/
 
 ### Smart Contracts
 Contracts are deployed on Morph Holesky Testnet:
-- Factory Address: [Will be updated after deployment]
 - Explorer: https://explorer-holesky.morphl2.io
 
 ### Frontend
@@ -237,24 +280,43 @@ This project was built for the **Morph Consumer Buildathon 2025** with a focus o
 [Link to demo video will be added]
 
 ### Live Demo
-[Link to deployed application will be added]
+[KindNest](https://kindnest.vercel.app/)
 
 ## 📞 Support
 
 - **Morph Documentation**: https://docs.morphl2.io/
-- **Discord**: [Morph Discord](https://discord.gg/L2Morph)
+- **X**: [KindNest X](https://x.com/kindnest_xyz)
 - **Issues**: Create an issue in this repository
 
-## 🚀 Next Steps
+## 🌱 Growing KindNest
 
-Future enhancements could include:
-- Telegram bot integration
-- Receipt scanning with OCR
-- Multi-currency support
-- Mobile app
-- Gas optimization
-- Advanced analytics
+*The future of caring together:*
+
+### 🔮 **Vision for Tomorrow**
+- **Telegram Care Bot**: Get gentle reminders and updates where you already chat
+- **Receipt Wisdom**: AI-powered scanning to make expense tracking effortless  
+- **Global Kindness**: Multi-currency support for worldwide nests of care
+- **Pocket-Sized Care**: Native mobile app for support on-the-go
+- **Optimized Giving**: Gas optimization to keep more value flowing to where it's needed
+- **Caring Insights**: Beautiful analytics that tell stories of human connection
+
+### 🤗 **Join Our Community**
+- **Share your story**: How has KindNest helped your community?
+- **Suggest with love**: What would make caring even easier?
+- **Build together**: Developers welcome to help grow our nest
 
 ---
 
-**Built with ❤️ for the Morph L2 ecosystem**
+## 💚 **About This Project**
+
+KindNest was born from a simple belief: **technology should make human connection warmer, not colder.**
+
+In a world where sharing expenses often creates awkwardness, KindNest transforms financial transparency into an act of care. Every gradient, every animation, every word is chosen to remind us that behind every wallet address is a human heart.
+
+Built with deep love for the **Morph L2 ecosystem** and a conviction that blockchain's greatest power lies not in its technology, but in its ability to help us trust and support each other.
+
+*Together is easier.* 🌱✨
+
+---
+
+**Made with 💚 by humans who believe in humans, for the Morph L2 ecosystem**
