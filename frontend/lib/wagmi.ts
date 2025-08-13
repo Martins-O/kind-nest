@@ -14,7 +14,10 @@ export const morphHolesky = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['https://rpc-holesky.morphl2.io'],
+      http: [
+        process.env.NEXT_PUBLIC_MORPH_RPC_URL || 'https://rpc-quicknode-holesky.morphl2.io',
+        'https://rpc-holesky.morphl2.io',
+      ],
     },
   },
   blockExplorers: {
@@ -27,7 +30,7 @@ export const morphHolesky = defineChain({
 });
 
 export const config = getDefaultConfig({
-  appName: 'SplitWise 3.0',
+  appName: 'KindNest',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'your-project-id',
   chains: [morphHolesky],
   ssr: true,

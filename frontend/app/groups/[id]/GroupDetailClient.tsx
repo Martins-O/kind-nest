@@ -166,6 +166,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   const expensesLimit = 5;
   const membersLimit = 10;
   const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Data hooks
   const { data: groupName } = useGroupName(groupAddress);
@@ -183,7 +184,15 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   const totalMembers = membersData ? Number(membersData[1]) : 0;
 
   // Write hooks
-  const { addMember, isPending: addingMember, isSuccess: memberAdded } = useAddMember(groupAddress);
+  const { 
+    addMember, 
+    isPending: addingMember, 
+    isSuccess: memberAdded, 
+    hash: addMemberHash,
+    error: addMemberError,
+    lastAddedMember,
+    lastAddedNickname
+  } = useAddMember(groupAddress);
   const { addExpense, isPending: addingExpense, isSuccess: expenseAdded } = useAddExpense(groupAddress);
   const { settleDebt, isPending: settlingDebt, isSuccess: debtSettled } = useSettleDebt(groupAddress);
   const { deactivateGroup, isPending: deactivating, isSuccess: groupDeactivated } = useDeactivateGroup();
@@ -196,13 +205,50 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   }, [isConnected, router]);
 
   useEffect(() => {
-    if (memberAdded) {
+    console.log('Member addition status:', {
+      isPending: addingMember,
+      isSuccess: memberAdded,
+      hash: addMemberHash,
+      error: addMemberError,
+      lastAddedMember,
+      lastAddedNickname
+    });
+    
+    // Handle successful member addition
+    if (memberAdded && addMemberHash) {
+      console.log('✅ Member added successfully!', {
+        hash: addMemberHash,
+        newMember: lastAddedMember,
+        nickname: lastAddedNickname
+      });
       setShowAddMember(false);
       setMemberAddress('');
       setMemberNickname('');
+      setErrorMessage(null); // Clear any previous errors
       refetchMembers();
+      
+      // Show success message
+      setErrorMessage(`✅ ${lastAddedNickname || 'Member'} has been invited to the nest!`);
+      setTimeout(() => setErrorMessage(null), 5000);
     }
-  }, [memberAdded, refetchMembers]);
+    
+    // Handle errors
+    if (addMemberError) {
+      console.error('❌ Member addition failed:', addMemberError);
+      let errorMsg = 'Failed to add member. ';
+      
+      if (addMemberError.message?.includes('OnlyOwner')) {
+        errorMsg += 'Only the group owner can invite new members.';
+      } else if (addMemberError.message?.includes('revert')) {
+        errorMsg += 'Transaction was rejected by the contract.';
+      } else {
+        errorMsg += 'Please try again or check your connection.';
+      }
+      
+      setErrorMessage(errorMsg);
+      setTimeout(() => setErrorMessage(null), 8000);
+    }
+  }, [addingMember, memberAdded, addMemberHash, addMemberError, lastAddedMember, lastAddedNickname, refetchMembers]);
 
   useEffect(() => {
     if (expenseAdded) {
@@ -242,7 +288,14 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
   const handleAddMember = (e: React.FormEvent) => {
     e.preventDefault();
     if (memberAddress.trim() && memberNickname.trim()) {
+      console.log('🔄 Adding member to group:', {
+        groupAddress,
+        memberAddress: memberAddress.trim(),
+        nickname: memberNickname.trim()
+      });
       addMember(memberAddress.trim(), memberNickname.trim());
+    } else {
+      console.warn('❌ Cannot add member: missing address or nickname');
     }
   };
 
@@ -359,6 +412,28 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
           </div>
         </div>
 
+        {/* Error/Success Message */}
+        {errorMessage && (
+          <div className={`mb-8 transition-all duration-500 ${
+            errorMessage.startsWith('✅') 
+              ? 'bg-gradient-to-r from-emerald-500/20 to-green-500/20 border-emerald-500/30' 
+              : 'bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-500/30'
+          } backdrop-blur-lg rounded-2xl p-6 border`}>
+            <div className="flex items-center gap-3">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                errorMessage.startsWith('✅') ? 'bg-emerald-500' : 'bg-red-500'
+              }`}>
+                {errorMessage.startsWith('✅') ? (
+                  <Heart className="h-4 w-4 text-white" />
+                ) : (
+                  <AlertTriangle className="h-4 w-4 text-white" />
+                )}
+              </div>
+              <p className="text-white font-medium">{errorMessage}</p>
+            </div>
+          </div>
+        )}
+
         {/* Balance Card */}
         {isGroupMember && balance !== undefined && (
           <div className="mb-12">
@@ -384,23 +459,30 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
 
         {/* Actions */}
         {isGroupMember && (
-          <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 mb-12">
-            <div 
-              onClick={() => setShowAddMember(true)}
-              className="group cursor-pointer transition-all duration-300 hover:scale-105"
-            >
-              <div className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <UserPlus className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">Invite Someone</h3>
-                    <p className="text-white/70">Grow your nest with care</p>
+          <div className="grid gap-4 sm:gap-6 mb-12" style={{
+            gridTemplateColumns: `repeat(${
+              (isGroupAdmin ? 1 : 0) + 1 + (balance && Number(balance) < 0 ? 1 : 0)
+            }, 1fr)`
+          }}>
+            {/* Only show Invite Someone button to group owner */}
+            {isGroupAdmin && (
+              <div 
+                onClick={() => setShowAddMember(true)}
+                className="group cursor-pointer transition-all duration-300 hover:scale-105"
+              >
+                <div className="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <UserPlus className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-1">Invite Someone</h3>
+                      <p className="text-white/70">Grow your nest with care</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
             
             <div 
               onClick={() => setShowAddExpense(true)}

@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf } from 'lucide-react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useUserGroups, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
+import { useUserGroups, useUserGroupsWithEventListener, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
+import { groupSync } from '@/lib/groupSync';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { formatDate, shortenAddress, formatETH } from '@/lib/utils';
+import { NetworkTest } from '@/components/NetworkTest';
 
 export default function Dashboard() {
   const { address, isConnected } = useAccount();
@@ -18,7 +20,20 @@ export default function Dashboard() {
   const [groupName, setGroupName] = useState('');
   const [nickname, setNickname] = useState('');
 
-  const { data: userGroupAddresses, isLoading: groupsLoading, refetch: refetchGroups } = useUserGroups(address);
+  const { data: userGroupAddresses, isLoading: groupsLoading, refetch: refetchGroups, error: groupsError } = useUserGroups(address);
+
+  // Debug logging
+  useEffect(() => {
+    const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
+    console.log(`[${timestamp}] Dashboard: User ${address?.slice(0, 6)}...`);
+    console.log(`[${timestamp}] Dashboard: Groups loading:`, groupsLoading);
+    if (groupsError) {
+      console.error(`[${timestamp}] Error fetching user groups:`, groupsError);
+    }
+    if (userGroupAddresses) {
+      console.log(`[${timestamp}] User group addresses (${userGroupAddresses.length}):`, userGroupAddresses);
+    }
+  }, [address, groupsLoading, groupsError, userGroupAddresses]);
   const { createGroup, isPending, isConfirming, isSuccess } = useCreateGroup();
   const { data: creationFee } = useCreationFee();
 
@@ -36,6 +51,19 @@ export default function Dashboard() {
       refetchGroups();
     }
   }, [isSuccess, refetchGroups]);
+
+  // Set up cross-tab dashboard sync
+  useEffect(() => {
+    if (address && refetchGroups) {
+      console.log('🎯 Setting up dashboard sync for user:', address.slice(0, 6) + '...');
+      groupSync.onDashboardChange(refetchGroups);
+      
+      return () => {
+        console.log('🧹 Cleaning up dashboard sync');
+        groupSync.removeListener('dashboard-refresh');
+      };
+    }
+  }, [address, refetchGroups]);
 
   const handleCreateGroup = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +96,10 @@ export default function Dashboard() {
           </div>
           <div className="flex items-center gap-4">
             <Button
-              onClick={() => refetchGroups()}
+              onClick={() => {
+                console.log('🔄 Manual refresh triggered');
+                refetchGroups();
+              }}
               variant="outline"
               size="sm"
               className="bg-kindnest-500/10 text-white border-kindnest-400/30 hover:bg-kindnest-500/20 transition-all duration-200"
@@ -187,6 +218,9 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+      
+      {/* Network Debug Component */}
+      <NetworkTest />
     </div>
   );
 }
@@ -201,10 +235,23 @@ function GroupCard({
   userAddress?: string;
   onGroupClick: (address: string) => void;
 }) {
-  const { data: groupInfo } = useGroupInfo(groupAddress);
-  const { data: memberInfo } = useMemberInfo(groupAddress, userAddress);
-  const { data: balance } = useMemberBalance(groupAddress, userAddress);
+  const { data: groupInfo, error: groupInfoError } = useGroupInfo(groupAddress);
+  const { data: memberInfo, error: memberInfoError } = useMemberInfo(groupAddress, userAddress);
+  const { data: balance, error: balanceError } = useMemberBalance(groupAddress, userAddress);
   const isMember = useIsMember(groupAddress, userAddress);
+
+  // Debug logging
+  useEffect(() => {
+    if (groupInfoError) {
+      console.error(`Error fetching group info for ${groupAddress}:`, groupInfoError);
+    }
+    if (memberInfoError) {
+      console.error(`Error fetching member info for ${groupAddress}:`, memberInfoError);
+    }
+    if (balanceError) {
+      console.error(`Error fetching balance for ${groupAddress}:`, balanceError);
+    }
+  }, [groupAddress, groupInfoError, memberInfoError, balanceError]);
 
   if (!groupInfo) {
     return (

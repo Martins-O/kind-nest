@@ -129,10 +129,9 @@ contract GroupTreasury is ReentrancyGuard, Ownable, Pausable {
         require(memberList.length < MAX_MEMBERS, "Maximum members reached");
         _addMember(_member, _nickname);
 
-        // Notify factory
-        try factory.addUserToGroup(_member, address(this)) {} catch {
-            // Continue even if factory call fails
-        }
+        // Notify factory - this call MUST succeed for group sync to work
+        // If it fails, the entire transaction should revert
+        factory.addUserToGroup(_member, address(this));
     }
 
     function _addMember(address _member, string memory _nickname) internal {

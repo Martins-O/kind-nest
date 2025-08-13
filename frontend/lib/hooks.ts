@@ -1,8 +1,10 @@
 'use client';
 
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useWatchContractEvent } from 'wagmi';
+import { useEffect, useState } from 'react';
 import { CONTRACTS, EXPENSE_FACTORY_ABI, GROUP_TREASURY_ABI } from './contracts';
 import { shortenAddress } from './utils';
+import { groupSync } from './groupSync';
 import type { GroupInfo, Expense, Member } from '@/types';
 
 // Factory hooks
@@ -31,17 +33,55 @@ export function useCreateGroup() {
 }
 
 export function useUserGroups(userAddress?: string) {
-  return useReadContract({
+  const result = useReadContract({
     address: CONTRACTS.EXPENSE_FACTORY,
     abi: EXPENSE_FACTORY_ABI,
     functionName: 'getUserGroups',
     args: userAddress ? [userAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!userAddress,
-      refetchInterval: 10000, // Refetch every 10 seconds
-      staleTime: 5000, // Consider data stale after 5 seconds
+      refetchInterval: 5000, // More aggressive refetching every 5 seconds
+      staleTime: 2000, // Consider data stale after 2 seconds
+      retry: 3, // Retry failed requests 3 times
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
     },
   });
+
+  // Set up cross-tab sync for this user
+  useEffect(() => {
+    if (userAddress && result.refetch) {
+      groupSync.onUserGroupsChange(userAddress, result.refetch);
+      
+      return () => {
+        groupSync.removeListener(userAddress);
+      };
+    }
+  }, [userAddress, result.refetch]);
+
+  return result;
+}
+
+// Enhanced hook that combines user groups with event listening
+export function useUserGroupsWithEventListener(userAddress?: string) {
+  const { data, isLoading, error, refetch } = useUserGroups(userAddress);
+
+  // Listen for GroupCreated events - new groups might mean this user was added
+  useWatchContractEvent({
+    address: CONTRACTS.EXPENSE_FACTORY,
+    abi: EXPENSE_FACTORY_ABI,
+    eventName: 'GroupCreated',
+    enabled: !!userAddress,
+    onLogs(logs) {
+      console.log('📡 New group created, checking for membership changes:', logs);
+      // Refetch after a short delay to allow blockchain state to sync
+      setTimeout(() => {
+        console.log('🔄 Auto-refetching user groups after GroupCreated event');
+        refetch();
+      }, 3000);
+    },
+  });
+
+  return { data, isLoading, error, refetch };
 }
 
 export function useGroupInfo(groupAddress?: string) {
@@ -52,6 +92,9 @@ export function useGroupInfo(groupAddress?: string) {
     args: groupAddress ? [groupAddress as `0x${string}`] : undefined,
     query: {
       enabled: !!groupAddress,
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      staleTime: 30000, // Cache for 30 seconds
     },
   });
 }
@@ -180,12 +223,17 @@ export function useDeactivateGroup() {
 
 // Write functions
 export function useAddMember(groupAddress: string) {
-  const { writeContract, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+  const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess, error: receiptError } = useWaitForTransactionReceipt({
     hash,
   });
 
+  const [lastAddedMember, setLastAddedMember] = useState<string | null>(null);
+  const [lastAddedNickname, setLastAddedNickname] = useState<string | null>(null);
+
   const addMember = (memberAddress: string, nickname: string) => {
+    setLastAddedMember(memberAddress);
+    setLastAddedNickname(nickname);
     writeContract({
       address: groupAddress as `0x${string}`,
       abi: GROUP_TREASURY_ABI,
@@ -194,12 +242,34 @@ export function useAddMember(groupAddress: string) {
     } as any);
   };
 
+  // Trigger sync notification when member is successfully added
+  useEffect(() => {
+    if (isSuccess && lastAddedMember && hash) {
+      console.log('✅ Member addition confirmed, triggering sync:', {
+        member: lastAddedMember,
+        nickname: lastAddedNickname,
+        group: groupAddress,
+        hash
+      });
+      
+      // Notify all tabs that this user has been added to the group
+      groupSync.notifyMemberAdded(lastAddedMember, groupAddress);
+      setLastAddedMember(null);
+      setLastAddedNickname(null);
+    }
+  }, [isSuccess, lastAddedMember, lastAddedNickname, groupAddress, hash]);
+
+  const error = writeError || receiptError;
+
   return {
     addMember,
     hash,
     isPending,
     isConfirming,
     isSuccess,
+    error,
+    lastAddedMember,
+    lastAddedNickname,
   };
 }
 
