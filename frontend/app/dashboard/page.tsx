@@ -4,7 +4,6 @@ import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Plus, Users, Receipt, Wallet, HandHeart, RefreshCw, Heart, Leaf } from 'lucide-react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useUserGroups, useUserGroupsWithEventListener, useCreateGroup, useGroupInfo, useCreationFee, useMemberInfo, useMemberBalance, useIsMember } from '@/lib/hooks';
 import { groupSync } from '@/lib/groupSync';
 import { Button } from '@/components/ui/Button';
@@ -78,7 +77,7 @@ export default function Dashboard() {
         <Card className="p-8">
           <CardContent>
             <h2 className="text-2xl font-bold mb-4">Please connect your wallet</h2>
-            <ConnectButton />
+            <appkit-button />
           </CardContent>
         </Card>
       </div>

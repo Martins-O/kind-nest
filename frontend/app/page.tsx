@@ -1,6 +1,5 @@
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -145,7 +144,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
               <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
-                <ConnectButton />
+                <appkit-button />
               </div>
             </div>
             <div className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group">
@@ -296,7 +295,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
                 <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
-                  <ConnectButton />
+                  <appkit-button />
                 </div>
               </div>
               <div className="text-white/60 text-sm">
