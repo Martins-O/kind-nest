@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import { createAppKit } from '@reown/appkit/react';
 import { wagmiAdapter, projectId, metadata, networks } from '@/lib/wagmi';
+import { WalletErrorHandler } from '@/components/WalletErrorHandler';
 
 // Create a QueryClient instance
 const queryClient = new QueryClient({
@@ -41,6 +42,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>
+        <WalletErrorHandler />
         {children}
       </QueryClientProvider>
     </WagmiProvider>

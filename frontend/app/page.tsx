@@ -145,25 +145,24 @@ export default function Home() {
             Every little helps, adding up to something beautiful.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col items-center justify-center gap-4 mb-8">
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
               <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
                 <appkit-button />
               </div>
             </div>
-            <div className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group">
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-            <button 
+            <p className="text-white/60 text-sm max-w-md text-center">
+              Connect with 600+ wallets, email, or social accounts (Google, GitHub, Apple)
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center mb-16">
+            <button
               onClick={() => router.push('/how-it-works')}
-              className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors group"
+              className="flex items-center space-x-2 text-white hover:text-emerald-400 transition-colors group"
             >
-              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-1 rounded-2xl">
-                <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
-                  <span> Create your nest of support</span>
-                </div>
-              </div>
-              
+              <span className="text-lg">Learn how it works</span>
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
 
