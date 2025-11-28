@@ -1,6 +1,7 @@
 'use client';
 
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { cookieStorage, createStorage } from 'wagmi';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { defineChain } from 'viem';
 
 // Define Morph Holesky Testnet
@@ -29,9 +30,28 @@ export const morphHolesky = defineChain({
   testnet: true,
 });
 
-export const config = getDefaultConfig({
-  appName: 'KindNest',
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'your-project-id',
-  chains: [morphHolesky],
+// Get projectId from environment
+export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'your-project-id';
+
+// Define metadata
+export const metadata = {
+  name: 'KindNest',
+  description: 'Support that feels human - A warm, community-focused platform where support flows as naturally as love',
+  url: 'https://kindnest.vercel.app',
+  icons: ['https://kindnest.vercel.app/favicon.ico']
+};
+
+// Define networks
+export const networks = [morphHolesky];
+
+// Create Wagmi Adapter
+export const wagmiAdapter = new WagmiAdapter({
+  storage: createStorage({
+    storage: cookieStorage
+  }),
   ssr: true,
+  projectId,
+  networks
 });
+
+export const config = wagmiAdapter.wagmiConfig;
