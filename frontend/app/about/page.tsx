@@ -1,6 +1,5 @@
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { 
@@ -124,7 +123,7 @@ export default function About() {
               <span className="text-xl font-bold text-white">KindNest</span>
             </div>
           </div>
-          <ConnectButton />
+          <appkit-button />
         </nav>
 
         {/* Header */}
@@ -297,7 +296,7 @@ export default function About() {
           </p>
           <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-1 rounded-2xl inline-block">
             <div className="bg-black/50 backdrop-blur-sm rounded-xl px-8 py-4">
-              <ConnectButton />
+              <appkit-button />
             </div>
           </div>
         </div>

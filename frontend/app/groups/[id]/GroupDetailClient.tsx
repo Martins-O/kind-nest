@@ -4,7 +4,6 @@ import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Plus, Users, Receipt, HandHeart, UserPlus, Wallet, CreditCard, FileText, ChevronLeft, ChevronRight, Trash2, AlertTriangle, Heart, Leaf, DollarSign } from 'lucide-react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { 
   useGroupExpenses, 
   useGroupMembers, 
@@ -348,7 +347,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
           <Wallet className="h-16 w-16 text-white mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-white mb-4">Connect Your Wallet</h2>
           <p className="text-white/70 mb-8">Connect your Web3 wallet to access this group</p>
-          <ConnectButton />
+          <appkit-button />
         </div>
       </div>
     );
@@ -393,7 +392,7 @@ export default function GroupDetailClient({ groupAddress }: { groupAddress: stri
                 </Button>
               )}
             </div>
-            <ConnectButton />
+            <appkit-button />
           </div>
 
           <div className="text-center mb-12">
