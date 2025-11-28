@@ -106,7 +106,10 @@ export default function Dashboard() {
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh Nests
             </Button>
-            <ConnectButton />
+            <div className="flex items-center gap-3">
+              <appkit-network-button />
+              <appkit-button />
+            </div>
           </div>
         </div>
 

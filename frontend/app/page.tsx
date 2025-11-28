@@ -101,24 +101,28 @@ export default function Home() {
             <span className="text-2xl font-bold text-white">KindNest</span>
           </div>
           <div className="hidden md:flex items-center space-x-6 text-white/80">
-            <button 
+            <button
               onClick={() => router.push('/features')}
               className="hover:text-white cursor-pointer transition-colors"
             >
               Features
             </button>
-            <button 
+            <button
               onClick={() => router.push('/how-it-works')}
               className="hover:text-white cursor-pointer transition-colors"
             >
               How it Works
             </button>
-            <button 
+            <button
               onClick={() => router.push('/about')}
               className="hover:text-white cursor-pointer transition-colors"
             >
               About
             </button>
+            <div className="flex items-center space-x-3">
+              <appkit-network-button />
+              <appkit-button />
+            </div>
           </div>
         </nav>
 
