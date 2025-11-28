@@ -189,7 +189,10 @@ export default function HowItWorks() {
               <span className="text-xl font-bold text-white">KindNest</span>
             </div>
           </div>
-          <appkit-button />
+          <div class="flex items-center gap-3">
+              <appkit-network-button />
+              <appkit-button />
+            </div>
         </nav>
 
         {/* Header */}

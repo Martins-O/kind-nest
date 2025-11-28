@@ -42,11 +42,11 @@ export default function About() {
       category: "Frontend",
       technologies: [
         "Next.js 15",
-        "React 19", 
+        "React 19",
         "TypeScript",
         "Tailwind CSS",
         "wagmi v2",
-        "RainbowKit"
+        "Reown AppKit"
       ]
     },
     {
@@ -123,7 +123,10 @@ export default function About() {
               <span className="text-xl font-bold text-white">KindNest</span>
             </div>
           </div>
-          <appkit-button />
+          <div className="flex items-center gap-3">
+            <appkit-network-button />
+            <appkit-button />
+          </div>
         </nav>
 
         {/* Header */}
